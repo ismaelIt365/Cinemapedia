@@ -1,5 +1,6 @@
 import 'package:cinemapedia/presentation/providers/movies/movies_providers.dart';
 import 'package:cinemapedia/presentation/providers/movies/movies_slideshow_provider.dart';
+import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:cinemapedia/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,83 +33,94 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
     ref.read(nowPlayinMoviesProvider.notifier).loadNextPage();
     ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(upcomingMoviesProvider.notifier).loadNextPage();
+    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
   }
 
   @override
   Widget build(BuildContext context) {
+    final initialLoading = ref.watch(initialLoadingProvider);
+
+    if (initialLoading) return const FullScreenLoader();
+
     final nowPlayingMovies = ref.watch(nowPlayinMoviesProvider);
     final slideShowsMovie = ref.watch(movieSlideshowProvider);
     final popularMovies = ref.watch(popularMoviesProvider);
+    final upcomingMovies = ref.watch(upcomingMoviesProvider);
+    final topRatedMovies = ref.watch(topRatedMoviesProvider);
 
-    return CustomScrollView(slivers: [
-      const SliverAppBar(
-        floating: true,
-        flexibleSpace: FlexibleSpaceBar(
-          title: CustomAppbar(),
+    return Visibility(
+      visible: !initialLoading,
+      child: CustomScrollView(slivers: [
+        const SliverAppBar(
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(
+            title: CustomAppbar(),
+          ),
         ),
-      ),
-      SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-        return Column(
-          children: [
-            // const CustomAppbar(),
+        SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+          return Column(
+            children: [
+              // const CustomAppbar(),
 
-            MovieSlideshow(movies: slideShowsMovie),
+              MovieSlideshow(movies: slideShowsMovie),
 
-            MovieHorizontalListView(
-              movies: nowPlayingMovies,
-              title: 'En cines',
-              // subTitle: 'Viernes 07',
-              loadNextPage: () {
-                ref.read(nowPlayinMoviesProvider.notifier).loadNextPage();
-              },
-            ),
+              MovieHorizontalListView(
+                movies: nowPlayingMovies,
+                title: 'En cines',
+                // subTitle: 'Viernes 07',
+                loadNextPage: () {
+                  ref.read(nowPlayinMoviesProvider.notifier).loadNextPage();
+                },
+              ),
 
-            MovieHorizontalListView(
-              movies: nowPlayingMovies,
-              title: 'Próximamente',
-              subTitle: 'En este mes',
-              loadNextPage: () {
-                ref.read(nowPlayinMoviesProvider.notifier).loadNextPage();
-              },
-            ),
+              MovieHorizontalListView(
+                movies: upcomingMovies,
+                title: 'Próximamente',
+                subTitle: 'En este mes',
+                loadNextPage: () {
+                  ref.read(upcomingMoviesProvider.notifier).loadNextPage();
+                },
+              ),
 
-            MovieHorizontalListView(
-              movies: popularMovies,
-              title: 'Populares',
-              // subTitle: 'En este mes',
-              loadNextPage: () {
-                ref.read(popularMoviesProvider.notifier).loadNextPage();
-              },
-            ),
+              MovieHorizontalListView(
+                movies: popularMovies,
+                title: 'Populares',
+                // subTitle: 'En este mes',
+                loadNextPage: () {
+                  ref.read(popularMoviesProvider.notifier).loadNextPage();
+                },
+              ),
 
-            MovieHorizontalListView(
-              movies: nowPlayingMovies,
-              title: 'Mejor Calificadas',
-              subTitle: 'Desde siempre',
-              loadNextPage: () {
-                ref.read(nowPlayinMoviesProvider.notifier).loadNextPage();
-              },
-            ),
+              MovieHorizontalListView(
+                movies: topRatedMovies,
+                title: 'Mejor Valoración',
+                // subTitle: 'Desde siempre',
+                loadNextPage: () {
+                  ref.read(topRatedMoviesProvider.notifier).loadNextPage();
+                },
+              ),
 
-            const SizedBox(
-              height: 10,
-            )
+              const SizedBox(
+                height: 10,
+              )
 
-            // Expanded(
-            //   child: ListView.builder(
-            //     itemCount: nowPlayingMovies.length,
-            //     itemBuilder: (context, index) {
-            //       final movie = nowPlayingMovies[index];
-            //       return ListTile(
-            //         title: Text(movie.title),
-            //       );
-            //     },
-            //   ),
-            // )
-          ],
-        );
-      }, childCount: 1))
-    ]);
+              // Expanded(
+              //   child: ListView.builder(
+              //     itemCount: nowPlayingMovies.length,
+              //     itemBuilder: (context, index) {
+              //       final movie = nowPlayingMovies[index];
+              //       return ListTile(
+              //         title: Text(movie.title),
+              //       );
+              //     },
+              //   ),
+              // )
+            ],
+          );
+        }, childCount: 1))
+      ]),
+    );
   }
 }
