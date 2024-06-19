@@ -1,41 +1,32 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
-import 'package:flutter/material.dart';
 
-class MovieSlideshow extends StatelessWidget {
+class MoviesSlideshow extends StatelessWidget {
   final List<Movie> movies;
 
-  const MovieSlideshow({super.key, required this.movies});
+  const MoviesSlideshow({super.key, required this.movies});
 
   @override
   Widget build(BuildContext context) {
-
-    final colors =  Theme.of(context).colorScheme;
+    final colors = Theme.of(context).colorScheme;
 
     return SizedBox(
-        height: 210,
-        width: double.infinity,
-        child: Swiper(
-          //forma de vista del card swiper
-          viewportFraction: 0.8,
-          scale: 0.9,
-          //moverse atuomaticamente
-          autoplay: true,
-          pagination: SwiperPagination(
-            //Botones de cuantas pelis hay 
+      height: 210,
+      width: double.infinity,
+      child: Swiper(
+        viewportFraction: 0.8,
+        scale: 0.9,
+        autoplay: true,
+        pagination: SwiperPagination(
             margin: const EdgeInsets.only(top: 0),
             builder: DotSwiperPaginationBuilder(
-              activeColor: colors.primary,
-              color: colors.secondary
-            )
-          ),
-          itemCount: movies.length,
-          itemBuilder: (context, index) {
-            final movie = movies[index];
-            return _Slide(movie: movie);
-          },
-        ));
+                activeColor: colors.primary, color: colors.secondary)),
+        itemCount: movies.length,
+        itemBuilder: (context, index) => _Slide(movie: movies[index]),
+      ),
+    );
   }
 }
 
@@ -50,10 +41,7 @@ class _Slide extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [
           BoxShadow(
-            color: Colors.black45,
-            blurRadius: 10,
-            offset: Offset(0, 10),
-          )
+              color: Colors.black45, blurRadius: 10, offset: Offset(0, 10))
         ]);
 
     return Padding(
