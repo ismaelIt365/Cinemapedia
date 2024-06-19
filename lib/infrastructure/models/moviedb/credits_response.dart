@@ -1,3 +1,4 @@
+
 class CreditsResponse {
     CreditsResponse({
         required this.id,
@@ -68,7 +69,7 @@ class Cast {
         character: json["character"],
         creditId: json["credit_id"],
         order: json["order"],
-        department: json["department"]!,
+        department: json["department"],
         job: json["job"],
     );
 
