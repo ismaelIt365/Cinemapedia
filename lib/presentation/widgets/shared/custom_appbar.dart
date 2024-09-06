@@ -16,14 +16,14 @@ class CustomAppbar extends ConsumerWidget {
     return SafeArea(
       bottom: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: SizedBox(
           width: double.infinity,
           child: Row(
             children: [
               Icon(Icons.movie_outlined, color: colors.primary),
               const SizedBox(
-                width: 5,
+                width: 10,
               ),
               Text('Cinemapedia', style: titleStyle),
 
@@ -44,7 +44,7 @@ class CustomAppbar extends ConsumerWidget {
                                     .searchMoviesByQuery))
                         .then((movie) {
                       if (movie == null) return;
-                      context.push('/movie/${movie.id}');
+                      context.push('/home/0/movie/${movie.id}');
                     });
                   },
                   icon: const Icon(Icons.search))
