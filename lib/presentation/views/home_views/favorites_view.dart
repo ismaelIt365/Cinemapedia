@@ -11,7 +11,8 @@ class FavoritesView extends ConsumerStatefulWidget {
   FavoritesViewState createState() => FavoritesViewState();
 }
 
-class FavoritesViewState extends ConsumerState<FavoritesView> {
+class FavoritesViewState extends ConsumerState<FavoritesView>
+    with AutomaticKeepAliveClientMixin {
   bool isLastPage = false;
   bool isLoading = false;
 
@@ -37,6 +38,8 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     final favoriteMovies = ref.watch(favoriteMoviesProvider).values.toList();
 
     if (favoriteMovies.isEmpty) {
@@ -50,7 +53,7 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
             Text('Ohhh no!!',
                 style: TextStyle(fontSize: 30, color: colors.primary)),
             const Text('No tienes películas favoritas',
-                style: TextStyle(fontSize: 20, color: Colors.black45)),
+                style: TextStyle(fontSize: 20)),
             const SizedBox(height: 20),
             FilledButton.tonal(
                 onPressed: () => context.go('/home/0'),
@@ -63,4 +66,7 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
     return Scaffold(
         body: MovieMasonry(loadNextPage: loadNextPage, movies: favoriteMovies));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
